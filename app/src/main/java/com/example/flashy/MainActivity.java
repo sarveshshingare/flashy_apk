@@ -18,19 +18,19 @@ import android.widget.Toast;
 import com.example.flashy.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-ActivityMainBinding binding;
+    ActivityMainBinding binding;
     private Boolean isTorchOn;  //to save the state of flashlight
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding=ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getSupportActionBar().hide();
         isTorchOn = false;
 
-        //check if flashLight is availabel or not
+        //check if flashLight is available
         Boolean isFlashAvailable = getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
 
         if (!isFlashAvailable) {
@@ -42,30 +42,27 @@ ActivityMainBinding binding;
         binding.button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-               try {
-                   if (binding.button.isChecked())
-                   {
-                       binding.imageView.setImageResource(R.drawable.on);
-                       changeLightState(true);
-                       isTorchOn =true;
-                       binding.textView.setText("Flashlight :  ON");
+                try {
+                    if (binding.button.isChecked()) {
+                        binding.imageView.setImageResource(R.drawable.on);
+                        changeLightState(true);
+                        isTorchOn = true;
+                        binding.textView.setText("Flashlight :  ON");
 
-                   }
-                   else
-                   {
-                       binding.imageView.setImageResource(R.drawable.off);
-                       changeLightState(false);
-                       isTorchOn = false;
-                       binding.textView.setText("Flashlight : OFF");
+                    } else {
+                        binding.imageView.setImageResource(R.drawable.off);
+                        changeLightState(false);
+                        isTorchOn = false;
+                        binding.textView.setText("Flashlight : OFF");
 
-                   }
-               }catch (Exception e){
-                   System.out.println(e);
-                   System.out.println("App not supported");
-                   binding.button.setChecked(false);
-                   binding.imageView.setImageResource(R.drawable.off);
-                   AlertDialogBox();
-               }
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                    System.out.println("App not supported");
+                    binding.button.setChecked(false);
+                    binding.imageView.setImageResource(R.drawable.off);
+                    AlertDialogBox();
+                }
             }
         });
     }
@@ -85,14 +82,14 @@ ActivityMainBinding binding;
         alertDialog.show();
     }
 
+    //  method to turn on/off flashlight
     private void changeLightState(boolean state) {
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M)
-        {
-            CameraManager cameraManager= (CameraManager) getSystemService(CAMERA_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            CameraManager cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
             String camId;
             try {
-                camId=cameraManager.getCameraIdList()[0];
-                cameraManager.setTorchMode(camId,state);
+                camId = cameraManager.getCameraIdList()[0];
+                cameraManager.setTorchMode(camId, state);
             } catch (CameraAccessException e) {
                 e.printStackTrace();
             }
@@ -100,6 +97,7 @@ ActivityMainBinding binding;
 
     }
 
+    //    turn off flashlight when app is paused
     @Override
     protected void onPause() {
         super.onPause();
@@ -109,6 +107,8 @@ ActivityMainBinding binding;
 
         }
     }
+
+//    turn on flashlight when app is resumed
 
     @Override
     protected void onResume() {
@@ -120,5 +120,5 @@ ActivityMainBinding binding;
         }
     }
 
-   }
+}
 //done
